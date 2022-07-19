@@ -43,12 +43,35 @@
                 <td>@(pizza.Price)&euro;</td>
                 <td><a class="btn btn-primary" href="@Url.Action("Detail", "Pizza", new {@pizza.Id})" >Visualizza</a></td>
                 <td><a class="btn btn-success" href="@Url.Action("Edit", "Pizza", new {@pizza.Id})" >Modifica</a></td>
-                <form asp-controller="Pizza" asp-action="Delete" asp-route-id="@pizza.Id" method="post">
-                    <td><button class="btn btn-danger" type="submit">Elimina</button></td>
-                </form>
+              
+                <td><button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#exampleModal@(pizza.Id)">Elimina</button></td>
+                <div class="modal fade" id="exampleModal@(pizza.Id)" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel@(pizza.Id)">ATTENZIONE</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                             </div>
+                            <div class="modal-body">
+                            Sei sicuro di voler eliminare l'elemento?
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Chiudi</button>
+                                <form asp-controller="Pizza" asp-action="Delete" asp-route-id="@pizza.Id" method="post">
+                                    <button class="btn btn-danger" type="submit">Elimina</button>
+                                </form>
+                             </div>
+                        </div>
+                    </div>
+                </div>
             </tr>
         }
+
        
+
+                
+                                
+
     </tbody>
 </table>
 
