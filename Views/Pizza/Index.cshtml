@@ -42,7 +42,10 @@
                 <td><div class="container-image"><img src="@pizza.Image"></div></td>
                 <td>@(pizza.Price)&euro;</td>
                 <td><a class="btn btn-primary" href="@Url.Action("Detail", "Pizza", new {@pizza.Id})" >Visualizza</a></td>
-                <td><a class="btn btn-primary" href="@Url.Action("Edit", "Pizza", new {@pizza.Id})" >Modifica</a></td>
+                <td><a class="btn btn-success" href="@Url.Action("Edit", "Pizza", new {@pizza.Id})" >Modifica</a></td>
+                <form asp-controller="Pizza" asp-action="Delete" asp-route-id="@pizza.Id" method="post">
+                    <td><button class="btn btn-danger" type="submit">Elimina</button></td>
+                </form>
             </tr>
         }
        
