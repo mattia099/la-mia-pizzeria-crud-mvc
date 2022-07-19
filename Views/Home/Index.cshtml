@@ -1,0 +1,44 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+@{
+
+    //using(PizzaContext db = new PizzaContext())
+    //{
+
+    //    Pizza margherita = new Pizza("Margherita", "pomodoro, mozzarella, basilico", "https://primochef.it/wp-content/uploads/2019/08/SH_pizza_fatta_in_casa-640x350.jpg.webp", 5.0f);
+    //    db.Add(margherita);
+    //    Pizza norma = new Pizza("Norma","pomodoro, mozzarella, basilico, melanzane, ricotta","https://www.silviocicchi.com/pizzachef/wp-content/uploads/2015/11/pizza-norma-evidenza-640x372.jpg",5.0f);
+    //    db.Add(norma);
+    //    Pizza tedesca = new Pizza("Tedesca","pomodoro, mozzarella, patatine fritte, wurstel","https://media-cdn.tripadvisor.com/media/photo-s/14/04/9b/2c/pizza-tedesca.jpg",7.0f);
+    //    db.Add(tedesca);
+    //    Pizza rucola = new Pizza("Rucola","pomodoro, mozzarella, rucola, prosciutto crudo, scaglie di grana","https://i2.wp.com/www.piccolericette.net/piccolericette/wp-content/uploads/2016/12/3018_Pizza.jpg?fit=1216%2C616&ssl=1",8.0f);
+    //    db.Add(rucola);
+    //    Pizza funghiSalsiccia = new Pizza("Funghi e salsiccia", "pomodoro, mozzarella, funghi, salsiccia", "https://www.dolcidee.it/media/uploads/recipe/5f27c80d1de9f_tmpbe6d34814b8e40bea08c9cdcd2210be0.jpg", 8.0f);
+    //    db.Add(funghiSalsiccia);
+    //    db.SaveChanges();
+    //}
+}
+
+<table class="table">
+    <thead>
+        <th>Name</th>
+        <th>Description</th>
+        <th>Image</th>
+        <th>Price</th>
+    </thead>
+    <tbody>
+        
+       @* @foreach(Pizza pizza in )
+        {
+            <tr>
+                <td>@pizza.Name</td>
+                <td>@pizza.Description</td>
+                <td><img src="@pizza.Image"></td>
+                <td>@(pizza.Price)&euro;</td>
+            </tr>
+        }*@
+       
+    </tbody>
+</table>
+
