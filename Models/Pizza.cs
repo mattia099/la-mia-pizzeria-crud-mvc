@@ -11,13 +11,20 @@ namespace la_mia_pizzeria_razor_layout.Models
         [Required]
         [StringLength(20)]
         public string Name { get; set; }
+        
         [Required]
         public string Description { get; set; }
+        
         [Required]
         public string Image { get; set; }
+        
         [Required]
         [Range(1,30)]
         public float Price { get; set; }
+        
+        public int? CategoryID { get; set; }
+        public Category? Category { get; set; }
+        
 
         public Pizza()
         {
