@@ -54,6 +54,7 @@ namespace la_mia_pizzeria_razor_layout.Controllers
             using(PizzaContext cxt = new PizzaContext())
             {
                 ViewData["categories"] = cxt.Category.ToList();
+                ViewData["ingredients"] = cxt.Ingredients.ToList();
             }
             return View();
 

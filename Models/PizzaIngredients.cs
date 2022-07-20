@@ -3,15 +3,11 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace la_mia_pizzeria_razor_layout.Models
 {
-    public class PizzaCategory
+    public class PizzaIngredients
     {
 
         public Pizza Pizza { get; set; }
-        public List<Category> Categories { get; set; }
+        public string Ingredients { get; set; }
        
-        public PizzaCategory()
-        {
-
-        }
     }
 }
