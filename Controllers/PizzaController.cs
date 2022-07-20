@@ -1,5 +1,6 @@
 ﻿using la_mia_pizzeria_razor_layout.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 
 namespace la_mia_pizzeria_razor_layout.Controllers
@@ -18,10 +19,10 @@ namespace la_mia_pizzeria_razor_layout.Controllers
         {
             using(PizzaContext db = new PizzaContext())
             {
-                Pizza pizzaFound = db.Pizza.Where(pizza => pizza.Id == id).FirstOrDefault();
+                Pizza pizzaFound = db.Pizza.Where(pizza => pizza.Id == id).Include(pizza => pizza.Category).FirstOrDefault();
                 if(pizzaFound == null)
                 {
-                    return View("Error");
+                    return NotFound("Nessun prodotto con questo id");
                 }
                 else
                 {
@@ -40,7 +41,7 @@ namespace la_mia_pizzeria_razor_layout.Controllers
             }
             using(PizzaContext context = new PizzaContext()) 
             {
-                context.Add(new Pizza(pizza.Name, pizza.Description, pizza.Image, pizza.Price));
+                context.Add(pizza);
                 context.SaveChanges();
                 return RedirectToAction("Index");
             }
@@ -50,6 +51,10 @@ namespace la_mia_pizzeria_razor_layout.Controllers
         [HttpGet]
         public IActionResult CreateForm()
         {
+            using(PizzaContext cxt = new PizzaContext())
+            {
+                ViewData["categories"] = cxt.Category.ToList();
+            }
             return View();
 
         }
@@ -60,6 +65,7 @@ namespace la_mia_pizzeria_razor_layout.Controllers
         {
             using(PizzaContext cxt=new PizzaContext())
             {
+                ViewData["categories"] = cxt.Category.ToList();
                 Pizza pizza = cxt.Pizza.Where(p => p.Id == id).FirstOrDefault();
                 if (pizza == null)
                 {
@@ -87,6 +93,7 @@ namespace la_mia_pizzeria_razor_layout.Controllers
                     toModify.Description = pizza.Description;
                     toModify.Image = pizza.Image;
                     toModify.Price = pizza.Price;
+                    toModify.CategoryID = pizza.CategoryID;
                     cxt.SaveChanges();
 
                     return RedirectToAction("Index");

@@ -9,4 +9,10 @@
     <img src="@Model.Image" alt="...">
     <h5>@Model.Name</h5>
     <p>@Model.Description</p>
+    @if (Model.Category != null)
+    {
+        <p>@Model.Category.Name</p>
+    }
+    
+    
 </div>
