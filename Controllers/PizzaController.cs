@@ -99,14 +99,14 @@ namespace la_mia_pizzeria_razor_layout.Controllers
                         postToCreate.Ingredients.Add(ingredient);
                     }
                 }
-
                 db.Pizza.Add(postToCreate);
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
+        }  
+
 
             
-        }  
                 
         
         [HttpGet]
@@ -118,10 +118,22 @@ namespace la_mia_pizzeria_razor_layout.Controllers
                 List<Category> categories = cxt.Category.ToList();
                 model.Categories = categories;
                 model.Pizza = cxt.Pizza.Where(p => p.Id == id).FirstOrDefault();
+
+                List<SelectListItem> IngredientList = new List<SelectListItem>();
+                List<Ingredient> Ingredients = cxt.Ingredients.ToList();
+
+                foreach (Ingredient ing in Ingredients)
+                {
+                    IngredientList.Add(new SelectListItem() { Text = ing.Name, Value = ing.Id.ToString() });
+                }
+
+                model.Ingredients = IngredientList;
+
                 if (model.Pizza == null)
                 {
                     return NotFound();
                 }
+
                 return View(model);
             }
         }
@@ -138,7 +150,7 @@ namespace la_mia_pizzeria_razor_layout.Controllers
 
             using(PizzaContext cxt = new PizzaContext())
             {
-                Pizza toModify = cxt.Pizza.Where(p => p.Id == id).FirstOrDefault();
+                Pizza toModify = cxt.Pizza.Where(p => p.Id == id).Include(p=>p.Ingredients).FirstOrDefault();
                 if(toModify != null)
                 {
                     toModify.Name = data.Pizza.Name;
@@ -146,6 +158,22 @@ namespace la_mia_pizzeria_razor_layout.Controllers
                     toModify.Image = data.Pizza.Image;
                     toModify.Price = data.Pizza.Price;
                     toModify.CategoryID = data.Pizza.CategoryID;
+
+                    toModify.Ingredients.Clear();
+                    List<SelectListItem> ingredientList = new List<SelectListItem>();
+                    if (data.SelectedIngredients != null)
+                    {
+                        foreach (string selectedIngId in data.SelectedIngredients)
+                        {
+                            int selectedIntIngId = int.Parse(selectedIngId);
+                            Ingredient ingredient = cxt.Ingredients.Where(i => i.Id == selectedIntIngId).FirstOrDefault();
+
+                            toModify.Ingredients.Add(ingredient);
+                        }
+                    }
+
+
+                    cxt.Update(toModify);
                     cxt.SaveChanges();
 
                     return RedirectToAction("Index");
