@@ -67,12 +67,12 @@ namespace la_mia_pizzeria_razor_layout.Controllers
                     List<Category> categories = context.Category.ToList();
                     data.Categories= categories;
 
-                    List<SelectListItem> IngredientList = new List<SelectListItem>();
-                    List<Ingredient> Ingredients = context.Ingredients.ToList();
+                    List<SelectListItem> IngredientList = new List<SelectListItem>(); //isanzio lista di elementi selezionati
+                    List<Ingredient> Ingredients = context.Ingredients.ToList(); //Lista ingredienti del db
 
-                    foreach (Ingredient ing in Ingredients)
+                    foreach (Ingredient ing in Ingredients) //ciclo ingredienti del db
                     {
-                        IngredientList.Add(new SelectListItem() { Text = ing.Name, Value = ing.Id.ToString() });
+                        IngredientList.Add(new SelectListItem() { Text = ing.Name, Value = ing.Id.ToString() }); //passo al costruttore il contenuto della select e il value
                     }
 
                     return View("CreateForm", data);
@@ -82,13 +82,13 @@ namespace la_mia_pizzeria_razor_layout.Controllers
             
             using(PizzaContext db = new PizzaContext())
             {
-                Pizza postToCreate = new Pizza();
-                postToCreate.Name = data.Pizza.Name;
-                postToCreate.Description = data.Pizza.Description;
-                postToCreate.Image = data.Pizza.Image;
-                postToCreate.Price = data.Pizza.Price;
-                postToCreate.CategoryID = data.Pizza.CategoryID;
-                postToCreate.Ingredients = new List<Ingredient>();
+                Pizza pizzaToCreate = new Pizza();
+                pizzaToCreate.Name = data.Pizza.Name;
+                pizzaToCreate.Description = data.Pizza.Description;
+                pizzaToCreate.Image = data.Pizza.Image;
+                pizzaToCreate.Price = data.Pizza.Price;
+                pizzaToCreate.CategoryID = data.Pizza.CategoryID;
+                pizzaToCreate.Ingredients = new List<Ingredient>(); //definisco e istanzio lista di ingredienti del db
 
                 if(data.SelectedIngredients != null) 
                 {
@@ -96,10 +96,10 @@ namespace la_mia_pizzeria_razor_layout.Controllers
                     {
                         int selectedIntIngId = int.Parse(selectedIngId);
                         Ingredient ingredient = db.Ingredients.Where(i => i.Id == selectedIntIngId).FirstOrDefault();
-                        postToCreate.Ingredients.Add(ingredient);
+                        pizzaToCreate.Ingredients.Add(ingredient);
                     }
                 }
-                db.Pizza.Add(postToCreate);
+                db.Pizza.Add(pizzaToCreate);
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
