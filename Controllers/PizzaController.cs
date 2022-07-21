@@ -1,5 +1,6 @@
 ﻿using la_mia_pizzeria_razor_layout.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 
@@ -40,6 +41,17 @@ namespace la_mia_pizzeria_razor_layout.Controllers
                 model.Pizza = new Pizza();
                 List<Category> categories = db.Category.ToList();
                 model.Categories = categories;
+
+                List<SelectListItem> IngredientList = new List<SelectListItem>();
+                List<Ingredient> Ingredients = db.Ingredients.ToList();
+
+                foreach (Ingredient ing in Ingredients) 
+                {
+                    IngredientList.Add(new SelectListItem() { Text = ing.Name, Value = ing.Id.ToString() });
+                }
+
+                model.Ingredients = IngredientList;
+
                 return View("CreateForm", model);
             }
         }
@@ -54,6 +66,15 @@ namespace la_mia_pizzeria_razor_layout.Controllers
                 {
                     List<Category> categories = context.Category.ToList();
                     data.Categories= categories;
+
+                    List<SelectListItem> IngredientList = new List<SelectListItem>();
+                    List<Ingredient> Ingredients = context.Ingredients.ToList();
+
+                    foreach (Ingredient ing in Ingredients)
+                    {
+                        IngredientList.Add(new SelectListItem() { Text = ing.Name, Value = ing.Id.ToString() });
+                    }
+
                     return View("CreateForm", data);
                 }
                 
@@ -67,6 +88,17 @@ namespace la_mia_pizzeria_razor_layout.Controllers
                 postToCreate.Image = data.Pizza.Image;
                 postToCreate.Price = data.Pizza.Price;
                 postToCreate.CategoryID = data.Pizza.CategoryID;
+                postToCreate.Ingredients = new List<Ingredient>();
+
+                if(data.SelectedIngredients != null) 
+                {
+                    foreach(string selectedIngId in data.SelectedIngredients)
+                    {
+                        int selectedIntIngId = int.Parse(selectedIngId);
+                        Ingredient ingredient = db.Ingredients.Where(i => i.Id == selectedIntIngId).FirstOrDefault();
+                        postToCreate.Ingredients.Add(ingredient);
+                    }
+                }
 
                 db.Pizza.Add(postToCreate);
                 db.SaveChanges();
