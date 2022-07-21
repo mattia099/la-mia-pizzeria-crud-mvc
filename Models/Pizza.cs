@@ -29,8 +29,8 @@ namespace la_mia_pizzeria_razor_layout.Models
 
         public Pizza()
         {
-
         }
+
         public Pizza(string name, string description, string image, float price)
         {
             Name = name;

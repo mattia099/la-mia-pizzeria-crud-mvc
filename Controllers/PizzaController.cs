@@ -31,58 +31,77 @@ namespace la_mia_pizzeria_razor_layout.Controllers
             }
         }
 
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public IActionResult Create(Pizza pizza)
-        {
-            if (!ModelState.IsValid)
-            {
-                return View("CreateForm", pizza);
-            }
-            using(PizzaContext context = new PizzaContext()) 
-            {
-                context.Add(pizza);
-                context.SaveChanges();
-                return RedirectToAction("Index");
-            }
-            
-        }
-
         [HttpGet]
         public IActionResult CreateForm()
         {
-            using(PizzaContext cxt = new PizzaContext())
+            using (PizzaContext db = new PizzaContext())
             {
-                ViewData["categories"] = cxt.Category.ToList();
-                ViewData["ingredients"] = cxt.Ingredients.ToList();
+                PizzaCategory model = new PizzaCategory();
+                model.Pizza = new Pizza();
+                List<Category> categories = db.Category.ToList();
+                model.Categories = categories;
+                return View("CreateForm", model);
             }
-            return View();
-
         }
 
-        [HttpGet]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Create(PizzaCategory data)
+        {
+            if (!ModelState.IsValid)
+            {
+                using (PizzaContext context = new PizzaContext())
+                {
+                    List<Category> categories = context.Category.ToList();
+                    data.Categories= categories;
+                    return View("CreateForm", data);
+                }
+                
+            }
+            
+            using(PizzaContext db = new PizzaContext())
+            {
+                Pizza postToCreate = new Pizza();
+                postToCreate.Name = data.Pizza.Name;
+                postToCreate.Description = data.Pizza.Description;
+                postToCreate.Image = data.Pizza.Image;
+                postToCreate.Price = data.Pizza.Price;
+                postToCreate.CategoryID = data.Pizza.CategoryID;
+
+                db.Pizza.Add(postToCreate);
+                db.SaveChanges();
+                return RedirectToAction("Index");
+            }
+
+            
+        }  
+                
         
+        [HttpGet]
         public IActionResult Edit(int id)
         {
             using(PizzaContext cxt=new PizzaContext())
             {
-                ViewData["categories"] = cxt.Category.ToList();
-                Pizza pizza = cxt.Pizza.Where(p => p.Id == id).FirstOrDefault();
-                if (pizza == null)
+                PizzaCategory model = new PizzaCategory();
+                List<Category> categories = cxt.Category.ToList();
+                model.Categories = categories;
+                model.Pizza = cxt.Pizza.Where(p => p.Id == id).FirstOrDefault();
+                if (model.Pizza == null)
                 {
                     return NotFound();
                 }
-                return View(pizza);
+                return View(model);
             }
         }
+                
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit(int id, Pizza pizza)
+        public IActionResult Edit(int id, PizzaCategory data)
         {
             if (!ModelState.IsValid)
             {
-                return View("Edit", pizza);
+                return View("Edit", data);
             }
 
             using(PizzaContext cxt = new PizzaContext())
@@ -90,11 +109,11 @@ namespace la_mia_pizzeria_razor_layout.Controllers
                 Pizza toModify = cxt.Pizza.Where(p => p.Id == id).FirstOrDefault();
                 if(toModify != null)
                 {
-                    toModify.Name = pizza.Name;
-                    toModify.Description = pizza.Description;
-                    toModify.Image = pizza.Image;
-                    toModify.Price = pizza.Price;
-                    toModify.CategoryID = pizza.CategoryID;
+                    toModify.Name = data.Pizza.Name;
+                    toModify.Description = data.Pizza.Description;
+                    toModify.Image = data.Pizza.Image;
+                    toModify.Price = data.Pizza.Price;
+                    toModify.CategoryID = data.Pizza.CategoryID;
                     cxt.SaveChanges();
 
                     return RedirectToAction("Index");

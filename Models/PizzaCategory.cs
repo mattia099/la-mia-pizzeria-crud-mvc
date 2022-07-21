@@ -7,11 +7,8 @@ namespace la_mia_pizzeria_razor_layout.Models
     {
 
         public Pizza Pizza { get; set; }
-        public List<Category> Categories { get; set; }
+        public List<Category>? Categories { get; set; }
        
-        public PizzaCategory()
-        {
-
-        }
+        
     }
 }
